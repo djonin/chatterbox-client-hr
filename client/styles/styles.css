@@ -123,3 +123,8 @@ form input[type=text] {
 .myButton:active {
     top:7px;
 }
+
+#chosen-select-room{
+    width: 350px;
+    padding-bottom: 15px;
+}
