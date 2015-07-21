@@ -287,10 +287,12 @@ var MessagesView = Backbone.View.extend({
 				ts = new Date(data[i+1].get('createdAt'));
 			}
 		}
-		if(lastMessageTime > (new Date(0))) {
-			$tempList.hide().css('opacity',0.0).prependTo(this.$el.find('#messages')).fadeIn(100).animate({opacity: 2.0});
-		} else {
-			$tempList.prependTo(this.$el.find('#messages'));
+		if($tempList.find('.msg').length > 0) {
+			if(lastMessageTime > (new Date(0))) {
+				$tempList.hide().css('opacity',0.0).prependTo(this.$el.find('#messages')).fadeIn(100).animate({opacity: 2.0});
+			} else {
+				$tempList.prependTo(this.$el.find('#messages'));
+			}
 		}
 		lastMessageTime = new Date(data[0].get('createdAt'));
 		var heightIncrease = $(document).height() - startHeight;
