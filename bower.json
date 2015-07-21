@@ -6,7 +6,8 @@
     "underscore": "~1.8.3",
     "requirejs": "*",
     "xss": "*",
-    "chosen" : "*"
+    "chosen": "*",
+    "backbone": "~1.2.1"
   },
   "ignore": [
     "**/.*",
