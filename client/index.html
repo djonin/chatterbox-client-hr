@@ -4,11 +4,14 @@
     <meta charset="utf-8" />
     <title>chatterbox</title>
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="bower_components/chosen/chosen.min.css">
 
     <!-- dependencies -->
     <script src="bower_components/xss/dist/xss.js"></script>
     <script src="bower_components/jquery/jquery.min.js"></script>
     <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/chosen/chosen.jquery.min.js"></script>
+    
     <!-- your scripts -->
     <script src="env/config.js"></script>
     <script src="scripts/app.js"></script>
@@ -16,6 +19,14 @@
   <body>
     <div id="main">
       <h1>chatterbox</h1>
+      <form id="tweetlerbox" ""action="action" action="http://">
+        <select data-placeholder="Choose a room..." id="chosen-select-room"></select>
+        <br/>
+        <textarea id="tweetler"></textarea>
+        <br>
+        <a class="myButton" id="tweetl">Send</a>
+      </form>
+
       <div id="messages">
       </div>
     </div>
