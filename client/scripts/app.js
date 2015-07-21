@@ -81,6 +81,8 @@ var displayMessage = function(data) {
 		} else {
 			$msg.removeClass('friendMessage');
 		}
+		if(entry.text === undefined)
+			continue;
 		if(entry.text.length > maxTextLength) {
 			entry.text = entry.text.substring(0, maxTextLength);
 		}
