@@ -196,20 +196,22 @@ var initRooms = function(){
 
 //-------------
 var Message = Backbone.Model.extend({
+	
   initialize: function(entry) {
-	if(!gRoomCollection[entry.roomname]) {
-		gRoomCollection[entry.roomname] = true;
-	}
-	var ts = new Date(entry.createdAt);
-	if(ts > new Date()) {
-		//disallow setting date later than current
-		ts = new Date();
-	}
 
-	var txt = filterXSS(entry.text) || "";
-	if(txt.length > maxTextLength) {
-		txt = txt.substring(0, maxTextLength);
-	}
+		if(!gRoomCollection[entry.roomname]) {
+			gRoomCollection[entry.roomname] = true;
+		}
+		var ts = new Date(entry.createdAt);
+		if(ts > new Date()) {
+			//disallow setting date later than current
+			ts = new Date();
+		}
+
+		var txt = filterXSS(entry.text) || "";
+		if(txt.length > maxTextLength) {
+			txt = txt.substring(0, maxTextLength);
+		}
 
   	this.set('username', filterXSS(entry.username) || "");
   	this.set('text', txt);
