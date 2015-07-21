@@ -10,6 +10,8 @@ var friends = {};
 var lastMessageTime = new Date(0);
 var gCurrentRoom = '';
 var gRoomCollection = {};
+var longestWordLength = 24;
+var maxTextLength = 1024;
 
 var getMessage = function(callback) {
 	$.ajax({
@@ -47,6 +49,17 @@ var sendMessage = function(data) {
 	});
 }
 
+var reColorMessages = function() {
+	var messages = document.getElementsByClassName('msg');
+	for(var i = 0; i<messages.length; i++) {
+		if(friends[$(messages[i]).find('.username')[0].innerText]) {
+			$(messages[i]).addClass('friendMessage');
+		} else {
+			$(messages[i]).removeClass('friendMessage');
+		}
+	}
+}
+
 var displayMessage = function(data) {
 	var $tempList = $('<div></div>');
 	if(!data.results[0])
@@ -67,6 +80,19 @@ var displayMessage = function(data) {
 			$msg.addClass('friendMessage');
 		} else {
 			$msg.removeClass('friendMessage');
+		}
+		if(entry.text.length > maxTextLength) {
+			entry.text = entry.text.substring(0, maxTextLength);
+		}
+		var str = entry.text.split(" ");
+		var longest = 0;
+		for (var j = 0; j < str.length; j++) {
+			if (longest < str[j].length) {
+			    longest = str[j].length;
+			}
+		}
+		if(longest > longestWordLength) {
+			$msg.addClass('longMessage');
 		}
 		$msg.text(': ' + filterXSS(entry.text));
 		if(ts > new Date()) {
@@ -99,13 +125,13 @@ var displayMessage = function(data) {
 	$('.username').off('click');
 	$('.username').on('click', function() {
 		var name = $(this).text();
-		if(frends[name]) {
+		if(friends[name]) {
 			delete friends[name];
 		} else {
 			friends[name] = true;
 		}
 		//reset messages so we display them in bold correctly
-		resetMessages();
+		reColorMessages();
 	});
 	//re-populate rooms dropdown
 	initRooms();
@@ -186,6 +212,7 @@ var initRooms = function(){
 		$('#chosen-select-room').append('<option value="'+roomName+'">'+roomName+'</option>');
 		$('#chosen-select-room').val(roomName);
     	$('#chosen-select-room').trigger("chosen:updated");
+    	resetMessages();
 	});
 
 };

@@ -6,11 +6,11 @@ body {
 }
 
 #main {
-    width: 500px;
+    width: 55%;
     margin: auto;
     text-align: left;
     background: white;
-    padding: 50px 60px;
+    padding: 5% 6%;
     border: solid #ddd;
     border-width: 0 1px 1px 1px;
 }
@@ -27,13 +27,13 @@ body {
 }
 
 #main ul {
-    padding-left: 20px;
+    padding-left: 2%;
 }
 
 #main .error {
     border: 1px solid red;
     background: #FDEFF0;
-    padding: 20px;
+    padding: 2%;
 }
 
 #main .success {
@@ -46,47 +46,13 @@ body {
     line-height: 13px;
 }
 
-form {
-    padding: 20px;
-    padding-left: 0;
-    margin-bottom: 20px;
-}
-
-form input[type=text] {
-    margin-right: 10px;
-    width: 70%;
-    font-size: 12px;
-    padding: 5px;
-}
-
-.chat {
-    padding: 5px;
-    margin-bottom: 5px;
-    background-color: #eee;
-}
-
-.chat .username {
-    font-weight: 800;
-}
-
-.chat:hover {
-    background-color: #ddd;
-}
-
-.spinner {
-    float: right;
-    height: 46px;
-    margin-bottom: 5px;
-}
-
-.spinner img {
-    padding: 10px;
+.msg:hover {
 }
 
 #chatterbox {
-    width:25%;
-    height:10%;
-    left:60%;
+    width:20%;
+    height:15%;
+    left:55%;
     position:fixed;
     z-index:1;
 }
@@ -98,11 +64,18 @@ form input[type=text] {
     height:80%;
 }
 
+.username:hover {
+  color:rgb(112, 111, 237);
+  cursor: pointer; 
+  cursor: hand;
+}
+
 .username {
-  font-weight:500;
+  font-weight:600;
 }
 
 .msg {
+  word-wrap: break-word;
   background:rgb(192, 222, 237);
   border: 2px solid rgb(0, 132, 180);
   border-radius: 15px;
@@ -110,10 +83,15 @@ form input[type=text] {
   padding: 10px 10px 10px 5px;
   margin-bottom: 10px;
   font-size: 15px;
-  max-width: 35%;
+  max-width: 50%;
+}
+
+.longMessage {
+  word-break:break-all;
 }
 
 .friendMessage {
+    background:rgb(180, 255, 222);
     font-weight:bold;
 }
 
@@ -172,6 +150,6 @@ form input[type=text] {
 }
 
 #chosen-select-room{
-    width: 350px;
+    width:100%;
     padding-bottom: 15px;
 }
