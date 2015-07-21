@@ -139,31 +139,6 @@ var displayMessage = function(data) {
 	initRooms();
 }
 
-$(document).ready(function(){
-	
-	$("#chatl").on('click', function(){
-		var newTweet = {};
-		newTweet.text = $('#chatler').val();
-
-		var username = window.location.search;
-		//"?username=kaven"
-		var name = "username=";
-		var pos = username.indexOf(name);
-		username = username.substring(pos + name.length);
-		newTweet.username = username;
-		newTweet.roomname = gCurrentRoom;		
-		sendMessage(newTweet);
-
-		$('#chatler').val('');	
-
-		setTimeout(getMessage.bind(this,displayMessage), 300);
-	});
-
-
-	getMessage(displayMessage);
-
-   	
-});
 
 var resetMessages = function() {
 	$("#messages").empty();
@@ -219,15 +194,181 @@ var initRooms = function(){
 
 };
 
-setInterval(getMessage.bind(this, displayMessage), 500);
+//-------------
+var Message = Backbone.Model.extend({
+  initialize: function(entry) {
+	if(!gRoomCollection[entry.roomname]) {
+		gRoomCollection[entry.roomname] = true;
+	}
+  	this.set('username', entry.username);
+  	this.set('text', entry.text);
+  	this.set('roomname', entry.roomname);
+  	this.set('createdAt', entry.createdAt);
+  },
+  
+  defaults: {
+  }
+
+});
+
+var MessageView = Backbone.View.extend({
+  initialize: function() {
+  },
+  render: function() {
+		if (gCurrentRoom.length > 0) {
+			if (gCurrentRoom !== this.model.get('roomname'))
+				return $('');
+		}
+
+		var $msg = $('<div class="msg"></div>');
+		if(friends[this.model.get('username')]) {
+			$msg.addClass('friendMessage');
+		} else {
+			$msg.removeClass('friendMessage');
+		}
+		if(this.model.get('text') === undefined)
+			return $('');
+		if(this.model.get('text').length > maxTextLength) {
+			this.model.set('text', this.model.get('text').substring(0, maxTextLength));
+		}
+		var str = this.model.get('text').split(" ");
+		var longest = 0;
+		for (var j = 0; j < str.length; j++) {
+			if (longest < str[j].length) {
+			    longest = str[j].length;
+			}
+		}
+		if(longest > longestWordLength) {
+			$msg.addClass('longMessage');
+		}
+		$msg.text(': ' + filterXSS(this.model.get('text')));
+		var ts = new Date(this.model.get('createdAt'));
+		if(ts > new Date()) {
+			//disallow setting date later than current
+			ts = new Date();
+			this.model.set('createdAt', ts.toString());
+		}
+		var $timeStamp = $('<a class="timeStamp">'+filterXSS(ts.toLocaleTimeString())+'</a>');
+		$('<br>').appendTo($msg)
+		$timeStamp.appendTo($msg);
+		$('<a class="username">'+filterXSS(this.model.get('username'))+'</a>').prependTo($msg);	
+
+		this.$el.empty();
+		this.$el.append($msg);
+  	return this.$el;
+  }
+});
+
+var Messages = Backbone.Collection.extend({
+  model: Message
+});
+
+var MessagesView = Backbone.View.extend({
+
+  initialize: function() {
+    //this.model.on('change:votes', this.render, this);
+  },
+
+  // Now we must render the collection:
+  render: function() {
+  	var data = this.model.models;
+		var $tempList = $('<div></div>');
+		if(!this.$el.html())
+			this.$el.html('<div id=messages></div>');
+		if(!data[0])
+			return this.$el;
+		var ts = new Date(data[0].get('createdAt'));
+		var startHeight = $(document).height();
+		for(var i = 0; (i<data.length)&&(lastMessageTime<ts); i++) {
+			var entry = data[i];
+			var messageView = new MessageView ({model : entry});
+			$tempList.append(messageView.render());
+			if(data[i+1]) {
+				ts = new Date(data[i+1].get('createdAt'));
+			}
+		}
+		if(lastMessageTime > (new Date(0))) {
+			$tempList.hide().css('opacity',0.0).prependTo(this.$el.find('#messages')).fadeIn(100).animate({opacity: 2.0});
+		} else {
+			$tempList.prependTo(this.$el.find('#messages'));
+		}
+		lastMessageTime = new Date(data[0].get('createdAt'));
+		var heightIncrease = $(document).height() - startHeight;
+		var scrollPos = $(document).scrollTop();
+		//adjust scroll position if we are not at the top of the page
+		if((scrollPos>0)&&(heightIncrease>0)) {
+			$(document).scrollTop(scrollPos + heightIncrease);
+		}
+		var that = this;
+		//re-attach event handlers
+		$('.username').off('click');
+		$('.username').on('click', function() {
+			var name = $(this).text();
+			if(friends[name]) {
+				delete friends[name];
+			} else {
+				friends[name] = true;
+			}
+			//reset messages so we display them in bold correctly
+			that.reColorMessages();
+		});
+		//re-populate rooms dropdown
+		initRooms();
+
+    return this.$el;
+  },
+
+  //recolor the messages:
+  reColorMessages : function() {
+		var messages = this.$el[0].getElementsByClassName('msg');
+		for(var i = 0; i<messages.length; i++) {
+			if(friends[$(messages[i]).find('.username')[0].innerText]) {
+				$(messages[i]).addClass('friendMessage');
+			} else {
+				$(messages[i]).removeClass('friendMessage');
+			}
+		}
+	}
+});
+
+var messages = new Messages();
+var messagesView = new MessagesView({model:messages});
+var newCallback = function(data) {
+
+	messages.reset();
+	for(var i = 0; i < data.results.length; i++){
+		var msgModel = new Message(data.results[i]);
+		messages.add(msgModel);
+	}
+	messagesView.render();
+}
+
+$(document).ready(function(){
+	
+	$("#chatl").on('click', function(){
+		var newTweet = {};
+		newTweet.text = $('#chatler').val();
+
+		var username = window.location.search;
+		//"?username=kaven"
+		var name = "username=";
+		var pos = username.indexOf(name);
+		username = username.substring(pos + name.length);
+		newTweet.username = username;
+		newTweet.roomname = gCurrentRoom;		
+		sendMessage(newTweet);
+
+		$('#chatler').val('');
+	});
+	$('#main').append(messagesView.render());
+});
 
 
 
+	getMessage(newCallback);
+	setInterval(getMessage.bind(this, newCallback), 500);
 
-
-
-
-
+var renderedList = $('#messages');
 
 
 
