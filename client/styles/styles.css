@@ -6,11 +6,11 @@ body {
 }
 
 #main {
-    width: 500px;
+    width: 55%;
     margin: auto;
     text-align: left;
     background: white;
-    padding: 50px 60px;
+    padding: 5% 6%;
     border: solid #ddd;
     border-width: 0 1px 1px 1px;
 }
@@ -27,13 +27,13 @@ body {
 }
 
 #main ul {
-    padding-left: 20px;
+    padding-left: 2%;
 }
 
 #main .error {
     border: 1px solid red;
     background: #FDEFF0;
-    padding: 20px;
+    padding: 2%;
 }
 
 #main .success {
@@ -46,58 +46,83 @@ body {
     line-height: 13px;
 }
 
-form {
-    padding: 20px;
-    padding-left: 0;
-    margin-bottom: 20px;
+.msg:hover {
 }
 
-form input[type=text] {
-    margin-right: 10px;
-    width: 70%;
-    font-size: 12px;
-    padding: 5px;
-}
-
-.chat {
-    padding: 5px;
-    margin-bottom: 5px;
-    background-color: #eee;
-}
-
-.chat .username {
-    font-weight: 800;
-}
-
-.chat:hover {
-    background-color: #ddd;
-}
-
-.spinner {
-    float: right;
-    height: 46px;
-    margin-bottom: 5px;
-}
-
-.spinner img {
-    padding: 10px;
-}
-
-#tweetlerbox {
-    width:25%;
-    height:10%;
-    left:60%;
+#chatterbox {
+    width:20%;
+    height:15%;
+    left:55%;
     position:fixed;
     z-index:1;
 }
 
-#tweetler {
+#chatler {
     border-radius:8px;
     font-size:18px;
     width:100%;
     height:80%;
 }
 
+.username:hover {
+  color:rgb(112, 111, 237);
+  cursor: pointer; 
+  cursor: hand;
+}
+
+.username {
+  font-weight:600;
+}
+
+.msg {
+  word-wrap: break-word;
+  background:rgb(192, 222, 237);
+  border: 2px solid rgb(0, 132, 180);
+  border-radius: 15px;
+  display: table;
+  padding: 10px 10px 10px 5px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  max-width: 50%;
+}
+
+.longMessage {
+  word-break:break-all;
+}
+
+.friendMessage {
+    background:rgb(180, 255, 222);
+    font-weight:bold;
+}
+
+.timeStamp {
+  font-weight:bold;
+  background:rgb(180, 220, 222);
+  border-radius: 5px;
+  font-size:12px;
+  font-variant:small-caps;
+}
+
+.addRoomButton {
+    position:relative;
+    top:3px;
+    -moz-box-shadow: 0px 5px 4px -2px grey;
+    -webkit-box-shadow: 0px 5px 4px -1px grey;
+    background-color:#599bb3 ;
+    border-radius:8px;
+    display:inline-block;
+    cursor:pointer;
+    color:white;
+    font-size:12px;
+    font-weight:bold;
+    padding:7px 9px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px black;
+}
+
+.addRoomButton:hover {
+  background-color:#408c99;
+}
 
 .myButton {
     position:relative;
@@ -125,6 +150,6 @@ form input[type=text] {
 }
 
 #chosen-select-room{
-    width: 350px;
+    width:100%;
     padding-bottom: 15px;
 }
