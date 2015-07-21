@@ -83,7 +83,7 @@ form input[type=text] {
     padding: 10px;
 }
 
-#tweetlerbox {
+#chatterbox {
     width:25%;
     height:10%;
     left:60%;
@@ -91,13 +91,60 @@ form input[type=text] {
     z-index:1;
 }
 
-#tweetler {
+#chatler {
     border-radius:8px;
     font-size:18px;
     width:100%;
     height:80%;
 }
 
+.username {
+  font-weight:500;
+}
+
+.msg {
+  background:rgb(192, 222, 237);
+  border: 2px solid rgb(0, 132, 180);
+  border-radius: 15px;
+  display: table;
+  padding: 10px 10px 10px 5px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  max-width: 35%;
+}
+
+.friendMessage {
+    font-weight:bold;
+}
+
+.timeStamp {
+  font-weight:bold;
+  background:rgb(180, 220, 222);
+  border-radius: 5px;
+  font-size:12px;
+  font-variant:small-caps;
+}
+
+.addRoomButton {
+    position:relative;
+    top:3px;
+    -moz-box-shadow: 0px 5px 4px -2px grey;
+    -webkit-box-shadow: 0px 5px 4px -1px grey;
+    background-color:#599bb3 ;
+    border-radius:8px;
+    display:inline-block;
+    cursor:pointer;
+    color:white;
+    font-size:12px;
+    font-weight:bold;
+    padding:7px 9px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px black;
+}
+
+.addRoomButton:hover {
+  background-color:#408c99;
+}
 
 .myButton {
     position:relative;
