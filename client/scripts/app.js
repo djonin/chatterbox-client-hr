@@ -196,14 +196,27 @@ var initRooms = function(){
 
 //-------------
 var Message = Backbone.Model.extend({
+
   initialize: function(entry) {
-	if(!gRoomCollection[entry.roomname]) {
-		gRoomCollection[entry.roomname] = true;
-	}
-  	this.set('username', entry.username);
-  	this.set('text', entry.text);
-  	this.set('roomname', entry.roomname);
-  	this.set('createdAt', entry.createdAt);
+
+		if(!gRoomCollection[entry.roomname]) {
+			gRoomCollection[entry.roomname] = true;
+		}
+		var ts = new Date(entry.createdAt);
+		if(ts > new Date()) {
+			//disallow setting date later than current
+			ts = new Date();
+		}
+
+		var txt = filterXSS(entry.text) || "";
+		if(txt.length > maxTextLength) {
+			txt = txt.substring(0, maxTextLength);
+		}
+
+  	this.set('username', filterXSS(entry.username) || "");
+  	this.set('text', txt);
+  	this.set('roomname', filterXSS(entry.roomname) || "");
+  	this.set('createdAt', filterXSS(ts.toString()) || "");
   },
   
   defaults: {
@@ -214,23 +227,36 @@ var Message = Backbone.Model.extend({
 var MessageView = Backbone.View.extend({
   initialize: function() {
   },
+
   render: function() {
+
+  	var date = new Date(this.model.get('createdAt'));
+
+  	var itemTemplate = _.template($('#item-template').html());
+
+  	var obj = {
+  		username: this.model.get('username'),
+  		text: this.model.get('text'),
+  		timestamp : date.toLocaleTimeString(),
+  		isFriends : true
+  	};
+
+  	var str = itemTemplate(obj);
+
 		if (gCurrentRoom.length > 0) {
 			if (gCurrentRoom !== this.model.get('roomname'))
 				return $('');
 		}
 
-		var $msg = $('<div class="msg"></div>');
+		this.$el.html(str);
+		var $msg = this.$el.find('.msg');
+
 		if(friends[this.model.get('username')]) {
 			$msg.addClass('friendMessage');
 		} else {
 			$msg.removeClass('friendMessage');
 		}
-		if(this.model.get('text') === undefined)
-			return $('');
-		if(this.model.get('text').length > maxTextLength) {
-			this.model.set('text', this.model.get('text').substring(0, maxTextLength));
-		}
+
 		var str = this.model.get('text').split(" ");
 		var longest = 0;
 		for (var j = 0; j < str.length; j++) {
@@ -241,20 +267,7 @@ var MessageView = Backbone.View.extend({
 		if(longest > longestWordLength) {
 			$msg.addClass('longMessage');
 		}
-		$msg.text(': ' + filterXSS(this.model.get('text')));
-		var ts = new Date(this.model.get('createdAt'));
-		if(ts > new Date()) {
-			//disallow setting date later than current
-			ts = new Date();
-			this.model.set('createdAt', ts.toString());
-		}
-		var $timeStamp = $('<a class="timeStamp">'+filterXSS(ts.toLocaleTimeString())+'</a>');
-		$('<br>').appendTo($msg)
-		$timeStamp.appendTo($msg);
-		$('<a class="username">'+filterXSS(this.model.get('username'))+'</a>').prependTo($msg);	
 
-		this.$el.empty();
-		this.$el.append($msg);
   	return this.$el;
   }
 });
