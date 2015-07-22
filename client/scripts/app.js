@@ -196,7 +196,7 @@ var initRooms = function(){
 
 //-------------
 var Message = Backbone.Model.extend({
-	
+
   initialize: function(entry) {
 
 		if(!gRoomCollection[entry.roomname]) {
@@ -227,31 +227,27 @@ var Message = Backbone.Model.extend({
 var MessageView = Backbone.View.extend({
   initialize: function() {
   },
+
   render: function() {
 
   	var date = new Date(this.model.get('createdAt'));
 
-    var html = [
-      '<div class="msg">',
-        '<a class="username">',
-          this.model.get('username') + ": ",  
-        '</a>',
-        '<span class="text">',
-            this.model.get('text'),
-        '</span>',
-        '<br>',
-        '<a class="timeStamp">',
-          date.toLocaleTimeString(),
-        '</a>',
-      '</div>'
-    ].join('');
+  	var itemTemplate = _.template($('#item-template').html());
+
+  	var obj = {
+  		username: this.model.get('username'),
+  		text: this.model.get('text'),
+  		timestamp : date.toLocaleTimeString()
+  	};
+
+  	var str = itemTemplate(obj);
 
 		if (gCurrentRoom.length > 0) {
 			if (gCurrentRoom !== this.model.get('roomname'))
 				return $('');
 		}
 
-		this.$el.html(html);
+		this.$el.html(str);
 		var $msg = this.$el.find('.msg');
 
 		if(friends[this.model.get('username')]) {

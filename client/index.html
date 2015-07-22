@@ -7,15 +7,8 @@
     <link rel="stylesheet" type="text/css" href="bower_components/chosen/chosen.min.css">
 
     <!-- dependencies -->
-    <script src="bower_components/xss/dist/xss.js"></script>
-    <script src="bower_components/jquery/jquery.min.js"></script>
-    <script src="bower_components/underscore/underscore-min.js"></script>
-    <script src="bower_components/chosen/chosen.jquery.min.js"></script>
-    <script src="bower_components/backbone/backbone-min.js"></script>
-
     <!-- your scripts -->
-    <script src="env/config.js"></script>
-    <script src="scripts/app.js"></script>
+
   </head>
   <body>
     <div id="main">
@@ -30,5 +23,24 @@
       </form>
 
     </div>
+
+    <script src="bower_components/xss/dist/xss.js"></script>
+    <script src="bower_components/jquery/jquery.min.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/chosen/chosen.jquery.min.js"></script>
+    <script src="bower_components/backbone/backbone.js"></script>
+
+    <script src="env/config.js"></script>
+    <script src="scripts/app.js"></script>
+
+  <script type="text/template" id="item-template">
+    <div class="msg">
+      <a class="username"><%- username %> : </a>
+      <span><%- text %></span>
+      <br>
+      <a class="timeStamp"><%- timestamp %></a>
+    </div>
+  </script>
+
   </body>
 </html>
