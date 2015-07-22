@@ -237,7 +237,8 @@ var MessageView = Backbone.View.extend({
   	var obj = {
   		username: this.model.get('username'),
   		text: this.model.get('text'),
-  		timestamp : date.toLocaleTimeString()
+  		timestamp : date.toLocaleTimeString(),
+  		isFriends : true
   	};
 
   	var str = itemTemplate(obj);
